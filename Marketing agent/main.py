@@ -17,7 +17,7 @@ init_db()
 def serve_dashboard():
     return FileResponse("static/frontend.html")
 
-# ----------------- INBOUND DATA SCHEMAS -----------------
+# INBOUND DATA SCHEMAS
 class GenericLeadRequest(BaseModel):
     source: str          # indiamart, gmail, instagram, facebook, youtube, website
     name: str
@@ -29,7 +29,7 @@ class BulkCampaignRequest(BaseModel):
     recipients: list[str]
     template_message: str
 
-# ----------------- INGESTION / WEBHOOKS -----------------
+#  INGESTION / WEBHOOKS
 @app.post("/api/webhook/ingest")
 def ingest_lead(data: GenericLeadRequest):
     """Universal Webhook handler for IndiaMART, FB, IG, Gmail, YouTube, Website leads"""
@@ -50,7 +50,7 @@ def ingest_lead(data: GenericLeadRequest):
         "landing_url": result["landing_url"]
     }
 
-# ----------------- CAMPAIGNS / BROADCAST -----------------
+#  CAMPAIGNS / BROADCAST 
 @app.post("/api/campaigns/broadcast")
 def run_broadcast(data: BulkCampaignRequest):
     """Bulk sender for WhatsApp, SMS, and Email campaigns"""
@@ -62,7 +62,7 @@ def run_broadcast(data: BulkCampaignRequest):
 
     return {"status": "success", "channel": data.channel, "dispatched": sent_count}
 
-# ----------------- DASHBOARD METRICS API -----------------
+# DASHBOARD METRICS API 
 @app.get("/api/leads")
 def fetch_leads():
     return get_all_leads()
